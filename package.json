@@ -1,0 +1,31 @@
+{
+  "name": "moviebooking",
+  "version": "1.0.0",
+  "description": "Restful API server for movie booking",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "restful",
+    "api",
+    "restify"
+  ],
+  "author": "Terry Fung",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.6",
+    "mongoose-timestamp": "^0.6.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "restify": "^8.5.1",
+    "restify-errors": "^8.0.2",
+    "restify-jwt-community": "^1.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
