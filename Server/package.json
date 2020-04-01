@@ -11,7 +11,7 @@
   "keywords": [
     "restful",
     "api",
-    "restify"
+    "Koa"
   ],
   "author": "Terry Fung",
   "license": "ISC",
