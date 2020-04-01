@@ -5,11 +5,16 @@
  * @since: Monday, 30th March 2020 10:27:22 pm
  * -----
  */
-
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
 
+/**
+ *  Authentication of User login.
+ * @param {String} email user email
+ * @param {String} password user password
+ * @returns {Promise} user
+ */
 exports.authenticate = (email, password) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -24,7 +29,7 @@ exports.authenticate = (email, password) => {
         }
       });
     } catch (err) {
-      reject("email not found"); // Email not found
+      reject("Email not found"); // Email not found
     }
   });
 };
