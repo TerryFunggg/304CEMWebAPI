@@ -1,9 +1,7 @@
-/**
- * -----
+/*
  * Authorization using bcryptjs to compare the password
  * @author: Terry Fung
  * @since: Monday, 30th March 2020 10:27:22 pm
- * -----
  */
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
