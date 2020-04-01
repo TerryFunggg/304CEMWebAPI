@@ -8,7 +8,7 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
-const hashPwd = require("../middleware/hashpwd");
+const { message, hashPwd } = require("../helpers/index");
 const config = require("../../config");
 
 /**
@@ -24,10 +24,8 @@ exports.user_register = async (ctx, next) => {
   if (user.length >= 1) {
     // email already exit in DB
     ctx.status = 409;
-    ctx.body = {
-      message: "email already exits",
-      code: -1
-    };
+    ctx.body = message("email already exits", -1);
+    next();
   } else {
     // create new user
     const { email, name, password } = ctx.request.body;
@@ -37,16 +35,11 @@ exports.user_register = async (ctx, next) => {
     try {
       const result = await newUser.save();
       ctx.status = 201;
-      ctx.body = {
-        message: "User Creted",
-        code: 0
-      };
+      ctx.body = message("User Created", 0);
+      next();
     } catch (err) {
       ctx.status = 500;
-      ctx.body = {
-        message: "Can not create user.",
-        code: -1
-      };
+      ctx.body = message("Can not create user.", -1);
     }
   }
 
@@ -93,8 +86,10 @@ exports.user_login = async (ctx, next) => {
       token,
       code: 0
     };
+    next();
   } catch (err) {
     ctx.status = 401;
-    ctx.body = { err, code: -1 };
+    ctx.body = message(err, -1);
+    next(false);
   }
 };
