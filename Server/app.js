@@ -29,21 +29,22 @@ app.use(json());
 /* Router                             */
 /* ################################## */
 const router = require("./api/routes/index");
-app.use(router.routes());
-app.use(router.allowedMethods());
+const userRouter = require("./api/routes/user");
+app.use(router.routes()).use(router.allowedMethods());
+app.use(userRouter.routes()).use(userRouter.allowedMethods());
 
 /* ################################## */
 /* MongoDB setUp                      */
 /* ################################## */
 mongoose.connect(config.MONGODB_URI, {
-  useUnifiedTopology: true,
-  useNewUrlParser: true
+    useUnifiedTopology: true,
+    useNewUrlParser: true
 });
 
 const db = mongoose.connection;
 db.on("error", err => {
-  console.log(err);
-  db.close();
+    console.log(err);
+    db.close();
 });
 
 /* ################################## */
