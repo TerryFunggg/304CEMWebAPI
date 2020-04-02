@@ -20,6 +20,7 @@ const config = require("./config");
 app.use(cors(config.CORS_OPT));
 app.use(logger());
 app.use(responseTime());
+app.use(cors(config.CORS_OPT));
 app.use(bodyParser());
 app.use(json());
 
@@ -28,6 +29,7 @@ app.use(json());
 /* ################################## */
 const router = require("./api/routes/index");
 app.use(router.routes());
+app.use(router.allowedMethods());
 
 /* ################################## */
 /* MongoDB setUp                      */
