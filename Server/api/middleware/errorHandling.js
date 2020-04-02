@@ -1,7 +1,7 @@
 const error = require("koa-json-error");
 
 /**
- *  Wrapping koa-json-error within format error
+ *  Wrapping koa-json-error within error formator
  */
 module.exports = () => {
   return error(err => {
