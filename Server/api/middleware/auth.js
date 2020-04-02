@@ -18,16 +18,17 @@ exports.authenticate = (email, password) => {
     try {
       const user = await User.findOne({ email }); // Get user by email
       bcrypt.compare(password, user.password, (err, match) => {
-        // Chaeck password
+        // Check password
         if (err) throw err;
         if (match) {
           resolve(user);
         } else {
-          reject("Password not match"); // the password don't match
+          reject(new Error("Password not match"));
+          //reject("Password not match"); // the password don't match
         }
       });
     } catch (err) {
-      reject("Email not found"); // Email not found
+      reject(new Error("Email not found")); // Email not found
     }
   });
 };
