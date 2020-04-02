@@ -11,14 +11,15 @@ const json = require("koa-json");
 const logger = require("koa-logger");
 const mongoose = require("mongoose");
 const cors = require("koa2-cors");
+const error = require("./api/middleware/errorHandling");
 const responseTime = require("./api/middleware/responseTime");
 const config = require("./config");
 
 /* ################################## */
 /* Middleware                         */
 /* ################################## */
-app.use(cors(config.CORS_OPT));
 app.use(logger());
+app.use(error());
 app.use(responseTime());
 app.use(cors(config.CORS_OPT));
 app.use(bodyParser());
