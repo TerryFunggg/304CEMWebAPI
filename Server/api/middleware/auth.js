@@ -14,21 +14,21 @@ const User = mongoose.model("User");
  * @returns {Promise} user
  */
 exports.authenticate = (email, password) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const user = await User.findOne({ email }); // Get user by email
-      bcrypt.compare(password, user.password, (err, match) => {
-        // Check password
-        if (err) throw err;
-        if (match) {
-          resolve(user);
-        } else {
-          reject(new Error("Password not match"));
-          //reject("Password not match"); // the password don't match
+    return new Promise(async (resolve, reject) => {
+        try {
+            const user = await User.findOne({ email }); // Get user by email
+            bcrypt.compare(password, user.password, (err, match) => {
+                // Check password
+                if (err) throw err;
+                if (match) {
+                    resolve(user);
+                } else {
+                    reject(new Error("Password not match"));
+                    //reject("Password not match"); // the password don't match
+                }
+            });
+        } catch (err) {
+            reject(new Error("Email not found")); // Email not found
         }
-      });
-    } catch (err) {
-      reject(new Error("Email not found")); // Email not found
-    }
-  });
+    });
 };
