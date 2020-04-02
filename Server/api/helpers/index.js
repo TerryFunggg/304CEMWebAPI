@@ -21,7 +21,7 @@ function message(message, code) {
 /**
  *  A function of hashing user password
  * @param {String} password message string
- * @returns {Promise} hash
+ * @returns  hash password
  */
 function hashPwd(password) {
     return new Promise(async (resolve, reject) => {
@@ -36,12 +36,24 @@ function hashPwd(password) {
     });
 }
 
-function add(a, b) {
-    return a + b;
+/**
+ *  Check the the email is validate eemail
+ * @param {String} email message string
+ * @returns Boolean
+ */
+function isEmail(email) {
+    if (email) {
+        return (
+            email.match(
+                /([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
+            ) != null
+        );
+    }
+    return false;
 }
 
 module.exports = {
     message,
     hashPwd,
-    add
+    isEmail
 };
