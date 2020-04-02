@@ -1,13 +1,11 @@
+const { isEmail } = require("../helpers/index");
+
 exports.validateLogin = async (ctx, next) => {
     const data = ctx.request.body;
     if (!data.email || !data.password) {
         ctx.throw(400, "Email or password not found");
     }
-    if (
-        !data.email.match(
-            /([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
-        )
-    ) {
+    if (!isEmail(email)) {
         ctx.throw(400, "Email is not vaild");
     }
 
@@ -17,11 +15,7 @@ exports.validateLogin = async (ctx, next) => {
 exports.validateAuth = async (ctx, next) => {
     const { email, password, name, userType } = ctx.request.body;
     if (!email || !password) ctx.throw(400, "Email or password not found");
-    if (
-        !email.match(
-            /([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
-        )
-    ) {
+    if (!isEmail(email)) {
         ctx.throw(400, "Email is not validated");
     }
     if (password.length > 20 || password.length < 6) {
