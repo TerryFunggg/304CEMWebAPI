@@ -65,8 +65,7 @@ exports.user_login = async (ctx, next) => {
       token,
       code: 0
     };
-    next();
   } catch (err) {
-    ctx.throw(err.status || 401, err);
+    ctx.throw(401, err);
   }
 };
