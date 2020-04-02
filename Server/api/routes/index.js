@@ -7,7 +7,7 @@
  */
 const Router = require("koa-router");
 const router = new Router({
-  prefix: "/api"
+    prefix: "/api"
 });
 
 /*---------------------
@@ -19,13 +19,18 @@ const UserController = require("../controllers/userController");
     Router
 ----------------------*/
 // User
-router.post("/register", UserController.user_register);
-router.post("/login", UserController.user_login);
+//router.post("/register", UserController.user_register);
+//router.post("/login", validateBody.validateLogin, UserController.user_login);
 
 // TODO Movie
 
 // TODO comment
 
 // TODO Order
+
+// Testing
+router.get("/test", async (ctx, next) => {
+    ctx.throw(400, " hohohohoo");
+});
 
 module.exports = router;

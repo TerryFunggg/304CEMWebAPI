@@ -12,10 +12,10 @@ const bcrypt = require("bcryptjs");
  * @param {Number} code code number 0: ok , -1: faile
  */
 function message(message, code) {
-  return {
-    message,
-    code
-  };
+    return {
+        message,
+        code
+    };
 }
 
 /**
@@ -24,24 +24,24 @@ function message(message, code) {
  * @returns {Promise} hash
  */
 function hashPwd(password) {
-  return new Promise(async (resolve, reject) => {
-    bcrypt.hash(password, 10, (err, hash) => {
-      if (err) throw err;
-      if (hash) {
-        resolve(hash);
-      } else {
-        reject("Can't not hash password");
-      }
+    return new Promise(async (resolve, reject) => {
+        bcrypt.hash(password, 10, (err, hash) => {
+            if (err) throw err;
+            if (hash) {
+                resolve(hash);
+            } else {
+                reject("Can't not hash password");
+            }
+        });
     });
-  });
 }
 
 function add(a, b) {
-  return a + b;
+    return a + b;
 }
 
 module.exports = {
-  message,
-  hashPwd,
-  add
+    message,
+    hashPwd,
+    add
 };
