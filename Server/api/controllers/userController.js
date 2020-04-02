@@ -23,9 +23,7 @@ exports.user_register = async (ctx, next) => {
   const user = await User.find({ email: body.email });
   if (user.length >= 1) {
     // email already exit in DB
-    ctx.status = 409;
-    ctx.body = message("email already exits", -1);
-    next();
+    ctx.throw(409, "email alerady exits");
   } else {
     // create new user
     const { email, name, password } = ctx.request.body;
@@ -38,28 +36,9 @@ exports.user_register = async (ctx, next) => {
       ctx.body = message("User Created", 0);
       next();
     } catch (err) {
-      ctx.status = 500;
-      ctx.body = message("Can not create user.", -1);
+      ctx.throw(500, "Can not create user.");
     }
   }
-
-  //const user = new User({ email, name, password });
-
-  // // hash password to user
-  // bcrypt.genSalt(10, (err, salt) => {
-  // bcrypt.hash(user.password, salt, async (err, hash) => {
-  //     if (err) return next(new errors.InternalError(err.message));
-  //     user.password = hash;
-  //     try {
-  //       // Save user
-  //       const newUser = await user.save();
-  //       res.send(201, { newUser });
-  //       next();
-  //     } catch (err) {
-  //       return next(new errors.ConflictError(err.message)); // 409 status
-  //     }
-  //});
-  // });
 };
 
 /**
@@ -88,8 +67,6 @@ exports.user_login = async (ctx, next) => {
     };
     next();
   } catch (err) {
-    ctx.status = 401;
-    ctx.body = message(err, -1);
-    next(false);
+    ctx.throw(err.status || 401, err);
   }
 };
