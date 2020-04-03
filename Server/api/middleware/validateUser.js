@@ -1,34 +1,26 @@
 const { isEmail } = require("../helpers/index");
+const errors = require("../helpers/errors");
 
-exports.validateLogin = async (ctx, next) => {
+exports.validate = async (ctx, next) => {
     const data = ctx.request.body;
-    if (!data.email || !data.password) {
-        ctx.throw(400, "Email or password not found");
+    const e = data => !!data.email && isEmail(data.email);
+    const p = data => !!data.password;
+    const checks = [e, p];
+    if (data.name != undefined) {
+        const n = data =>
+            !!data.name && data.name.length > 3 && data.name.length <= 20;
+        checks.push(n);
     }
-    if (!isEmail(email)) {
-        ctx.throw(400, "Email is not vaild");
+    if (data.userType != undefined) {
+        const u = data =>
+            !!data.userType && (data.userType == 0 || data.userType == 1);
+        checks.push(u);
     }
+    const isPass = check => check(data);
 
-    await next();
-};
-
-exports.validateAuth = async (ctx, next) => {
-    const { email, password, name, userType } = ctx.request.body;
-    if (!email || !password) ctx.throw(400, "Email or password not found");
-    if (!isEmail(email)) {
-        ctx.throw(400, "Email is not validated");
+    if (checks.every(isPass)) {
+        await next();
+    } else {
+        errors.throws(new errors.ConfirmationError(), ctx);
     }
-    if (password.length > 20 || password.length < 6) {
-        ctx.throw(400, "Password length not accpeted");
-    }
-    if (name.length < 3 || name.length > 20) {
-        ctx.throw(400, "User Name length not accpected");
-    }
-    if (userType) {
-        if (userType !== 0 || userType !== 1) {
-            ctx.throw(400, "userType is not validated");
-        }
-    }
-
-    await next();
 };
