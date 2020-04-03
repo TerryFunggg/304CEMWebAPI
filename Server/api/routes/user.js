@@ -8,11 +8,7 @@ const UserController = require("../controllers/userController");
 /*---------------------
     Router
 ----------------------*/
-router.post(
-    "/register",
-    validateUser.validateAuth,
-    UserController.user_register
-);
-router.post("/login", validateUser.validateLogin, UserController.user_login);
+router.post("/register", validateUser.validate, UserController.user_register);
+router.post("/login", validateUser.validate, UserController.user_login);
 
 module.exports = router;
