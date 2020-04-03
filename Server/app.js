@@ -9,9 +9,9 @@ const app = new Koa();
 const bodyParser = require("koa-bodyparser");
 const json = require("koa-json");
 const logger = require("koa-logger");
-const mongoose = require("mongoose");
 const cors = require("koa2-cors");
-const error = require("./api/middleware/errorHandling");
+const mongoose = require("mongoose");
+const error = require("./api/middleware/error");
 const responseTime = require("./api/middleware/responseTime");
 const config = require("./config");
 
@@ -52,5 +52,9 @@ db.on("error", err => {
 /* ################################## */
 app.listen(config.PORT);
 console.log(`Server started on port ${config.PORT}`);
+
+app.on("error", (err, ctx) => {
+    console.error("server error", err, ctx);
+});
 
 module.exports = app;
