@@ -10,7 +10,7 @@ module.exports = () => {
             status: err.status || err.statusCode || 500,
             message: err.message,
             name: err.name,
-            //stack: err.stack, // error stack
+            stack: err.stack, // error stack
             //type: err.type,
 
             // custom attributes

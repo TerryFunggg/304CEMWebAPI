@@ -11,7 +11,7 @@ const json = require("koa-json");
 const logger = require("koa-logger");
 const cors = require("koa2-cors");
 const mongoose = require("mongoose");
-const error = require("./api/middleware/error");
+const error = require("./api/middleware/json-error");
 const responseTime = require("./api/middleware/responseTime");
 const config = require("./config");
 
