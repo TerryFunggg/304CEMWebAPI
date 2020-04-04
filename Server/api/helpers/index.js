@@ -17,7 +17,7 @@ const errors = require("../helpers/errors");
 function message(message, code) {
     return {
         message,
-        code
+        code,
     };
 }
 
@@ -29,7 +29,7 @@ function message(message, code) {
 function hashPwd(password) {
     return new Promise(async (resolve, reject) => {
         bcrypt.hash(password, 10, (err, hash) => {
-            if (err) throw reject(new errors.InternalServerError());
+            if (err) reject(new errors.InternalServerError());
             resolve(hash);
         });
     });
@@ -59,7 +59,7 @@ function isEmail(email) {
 
 function createToken(user) {
     const token = jwt.sign(user.toJSON(), config.JWT_SECRET, {
-        expiresIn: "1d"
+        expiresIn: "1d",
     });
     //const { iat, exp } = jwt.decode(token);
     return token;
@@ -70,5 +70,5 @@ module.exports = {
     hashPwd,
     isEmail,
     createToken,
-    comparePwd
+    comparePwd,
 };
