@@ -3,48 +3,35 @@
  * @author: Terry Fung
  * @since: Monday, 30th March 2020 10:27:42 pm
  */
+const mongoose = require("mongoose");
 
-const User = require("../db/User");
-const errors = require("../helpers/errors");
-const { comparePwd, hashPwd } = require("../helpers/index");
+const UserSchema = new mongoose.Schema({
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        match: /([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
+    },
+    name: {
+        type: String,
+        required: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+    created: {
+        type: Date,
+        default: Date.now,
+    },
+    avatar: {
+        type: String,
+    },
+    userType: {
+        type: Number, // 0: admin 1:user
+        default: 1,
+    },
+});
+const User = mongoose.model("User", UserSchema);
 
-/**
- *  Authentication of User login.
- * @param {String} email user email
- * @param {String} password user password
- * @returns user
- */
-exports.authenticate = (email, password) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const user = await User.findOne({ email }); // Get user by email
-            await comparePwd(password, user.password);
-            resolve(user); // if success, then return user.
-        } catch (err) {
-            reject(new errors.ConfirmationError());
-        }
-    });
-};
-
-/**
- *  add user to DB
- * @param {any} user
- */
-exports.add = async (user) => {
-    const { email, password, name } = user;
-
-    //Check email duplicate
-    const getUser = await User.find({ email });
-    if (getUser.length >= 1) {
-        throw new errors.ItemAlreadyExistsError();
-    }
-    // create new user
-    try {
-        const newUser = new User({ email, name, password });
-        const hash = await hashPwd(newUser.password);
-        newUser.password = hash;
-        await newUser.save();
-    } catch (err) {
-        return errors.throws(err, ctx);
-    }
-};
+module.exports = User;
