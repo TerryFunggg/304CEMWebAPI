@@ -10,6 +10,8 @@ const bodyParser = require("koa-bodyparser");
 const json = require("koa-json");
 const logger = require("koa-logger");
 const cors = require("koa2-cors");
+const static = require("koa-static");
+const path = require("path");
 const mongoose = require("mongoose");
 const error = require("./api/middleware/json-error");
 const responseTime = require("./api/middleware/responseTime");
@@ -18,11 +20,12 @@ const config = require("./config");
 /* ################################## */
 /* Middleware                         */
 /* ################################## */
+//app.use(cors(config.CORS_OPT));
 app.use(logger());
 app.use(error());
 app.use(responseTime());
-app.use(cors(config.CORS_OPT));
 app.use(bodyParser());
+app.use(static(path.join(__dirname, "/uploads")));
 app.use(json());
 
 /* ################################## */
@@ -38,11 +41,12 @@ app.use(userRouter.routes()).use(userRouter.allowedMethods());
 /* ################################## */
 mongoose.connect(config.MONGODB_URI, {
     useUnifiedTopology: true,
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useCreateIndex: true,
 });
 
 const db = mongoose.connection;
-db.on("error", err => {
+db.on("error", (err) => {
     console.log(err);
     db.close();
 });

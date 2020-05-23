@@ -5,32 +5,51 @@
  * @since: Monday, 30th March 2020 10:24:41 pm
  * -----
  */
+// TODO: checka auth tonken
 const Router = require("koa-router");
 const router = new Router({
-    prefix: "/api"
+    prefix: "/api",
 });
 
+//image handle
+const multer = require("../middleware/imageHandler");
+const validation = require("../middleware/validation");
 /*---------------------
     Inport Controller
 ----------------------*/
-const UserController = require("../controllers/userController");
+const PostsController = require("../controllers/postsController");
 
-/*---------------------
-    Router
-----------------------*/
-// User
-//router.post("/register", UserController.user_register);
-//router.post("/login", validateBody.validateLogin, UserController.user_login);
+router.post(
+    "/posts",
+    //validation.validateToken,
+    multer.single("post"),
+    //validation.validateRegister,
+    PostsController.addPosts
+);
 
-// TODO Movie
+// Get user posts
+router.get("/posts/", PostsController.getAllPosts);
+router.get("/posts/user/:id", PostsController.getPostsByUid);
+router.get("/post/:id", PostsController.getPostsByPostID);
+//Fetch following user posts
+router.get("/posts/:id", PostsController.fetchPostByUid);
+router.put("/post/desc/:id", PostsController.updateDescByPid);
+// like photo
+router.put("/posts/like/:id", PostsController.updatePostlike);
+router.del("/post/:pid", PostsController.deletePostById);
 
-// TODO comment
+// Comment
+const CommentController = require("../controllers/commentsController");
+router.post("/comments/post", CommentController.addCommentByPostId);
+router.get("/comments/post/:pid", CommentController.getCommentByPostId);
 
-// TODO Order
+//const FollowingController = require("../controllers/followingController");
+//router.get("/following/:id", FollowingController.getFollowingById);
 
 // Testing
-router.get("/test", async (ctx, next) => {
-    ctx.throw(400, " hohohohoo");
+//const validation = require("../middleware/validation");
+router.post("/test", validation.validateToken, async (ctx, next) => {
+    ctx.body = { token: ctx.token };
 });
 
 module.exports = router;

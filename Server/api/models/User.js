@@ -4,6 +4,7 @@
  * @since: Monday, 30th March 2020 10:27:42 pm
  */
 const mongoose = require("mongoose");
+const config = require("../../config");
 
 const UserSchema = new mongoose.Schema({
     email: {
@@ -26,11 +27,10 @@ const UserSchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
+        default: config.BASE_URL + "/a35855d6-7a9e-4f59-bc84-0606b9d2465d.png",
     },
-    userType: {
-        type: Number, // 0: admin 1:user
-        default: 1,
-    },
+    following: [],
+    followers: [],
 });
 const User = mongoose.model("User", UserSchema);
 

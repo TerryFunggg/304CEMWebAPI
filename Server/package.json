@@ -1,7 +1,7 @@
 {
-    "name": "moviebooking",
+    "name": "whatsins_backen",
     "version": "1.0.0",
-    "description": "Restful API server for movie booking",
+    "description": "Restful API server for android project WhatsIns",
     "main": "index.js",
     "scripts": {
         "start": "node app.js",
@@ -23,10 +23,13 @@
         "koa-json": "^2.0.2",
         "koa-json-error": "^3.1.2",
         "koa-logger": "^3.2.1",
+        "koa-multer": "^1.0.2",
         "koa-router": "^8.0.8",
+        "koa-static": "^5.0.0",
         "koa2-cors": "^2.0.6",
         "mongoose": "^5.9.6",
-        "mongoose-timestamp": "^0.6.0"
+        "mongoose-timestamp": "^0.6.0",
+        "uuid": "^7.0.3"
     },
     "devDependencies": {
         "nodemon": "^2.0.2",

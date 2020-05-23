@@ -5,6 +5,8 @@
  */
 
 const User = require("../models/User");
+const Posts = require("../models/Posts");
+const config = require("../../config");
 const {
     createToken,
     message,
@@ -23,10 +25,10 @@ const errors = require("../helpers/errors");
  */
 exports.user_register = async (ctx, next) => {
     try {
-        const user = await add(ctx.request.body);
+        const user = await add(ctx.req);
         ctx.status = 201;
         ctx.body = message("User Created", 0);
-        next();
+        await next();
     } catch (err) {
         return errors.throws(err, ctx);
     }
@@ -41,18 +43,124 @@ exports.user_register = async (ctx, next) => {
  */
 exports.user_login = async (ctx, next) => {
     try {
-        const { email, password } = ctx.request.body;
-        const user = await authenticate(email, password);
+        const user = await authenticate(ctx.user.email, ctx.user.password);
         // Create JWT and send to the client
         const token = createToken(user);
         // Send response to client
         ctx.status = 200;
-        ctx.body = { token, code: 0 };
-        next();
+        ctx.body = { uid: user._id, token, code: 0 };
+        await next();
     } catch (err) {
         return errors.throws(err, ctx);
     }
 };
+
+exports.getUserByName = async (ctx, next) => {
+    try {
+        const name = ctx.request.query.key;
+        const users = await findUsersByName(name);
+        ctx.status = 200;
+        ctx.body = { users };
+    } catch (e) {
+        return errors.throws(e, ctx);
+    }
+};
+
+exports.getUserById = async (ctx, next) => {
+    try {
+        const id = ctx.params.id;
+        const user = await findUserById(id);
+        const post_num = await getPostsNumber(id);
+        const following_num = user.following.length;
+        const followers_num = user.followers.length;
+        ctx.status = 200;
+        ctx.body = {
+            id: user._id,
+            name: user.name,
+            avatar: user.avatar,
+            post_num,
+            following_num,
+            followers_num,
+            following: user.following,
+            followers: user.followers,
+        };
+        await next();
+    } catch (err) {}
+};
+
+exports.updateUserFollowing = async (ctx, next) => {
+    try {
+        const following_id = ctx.request.body.fid;
+        const f = await updateFollowing(ctx.params.id, following_id);
+        const u = await updateFollowers(following_id, ctx.params.id);
+        ctx.status = 201;
+        ctx.body = message("update successful", 0);
+    } catch (e) {
+        return errors.throws(e, ctx);
+    }
+};
+
+exports.removeUserFollowing = async (ctx, next) => {
+    try {
+        const unfollow_id = ctx.request.query.fid;
+        const f = await removeFollowing(ctx.params.id, unfollow_id);
+        const u = await removeFollowers(unfollow_id, ctx.params.id);
+        ctx.status = 201;
+        ctx.body = message("delete successful", 0);
+    } catch (e) {
+        return errors.throws(e, ctx);
+    }
+};
+
+async function removeFollowing(uid, fid) {
+    return await User.updateOne(
+        { _id: uid },
+        {
+            $pull: { following: fid },
+        }
+    );
+}
+async function removeFollowers(fid, uid) {
+    return await User.updateOne(
+        { _id: fid },
+        {
+            $pull: { followers: uid },
+        }
+    );
+}
+
+async function findUsersByName(name) {
+    const reg = new RegExp(name, "i");
+    return await User.find({ name: { $regex: reg } }).select(
+        "_id avatar name followers"
+    );
+}
+
+async function findUserById(uid) {
+    return await User.findById(uid);
+}
+
+async function getPostsNumber(uid) {
+    return await Posts.count({
+        publisher: uid,
+    });
+}
+
+async function updateFollowing(uid, follow_id) {
+    return await User.updateOne(
+        { _id: uid },
+        { $push: { following: follow_id } }
+    );
+}
+
+async function updateFollowers(fid, uid) {
+    return await User.updateOne(
+        { _id: fid },
+        {
+            $push: { followers: uid },
+        }
+    );
+}
 
 /**
  *  Authentication of User login.
@@ -76,8 +184,9 @@ function authenticate(email, password) {
  *  add user to DB
  * @param {any} user
  */
-async function add(user) {
-    const { email, password, name } = user;
+async function add(req) {
+    const { email, password, name } = req.body;
+    let avatar = req.file || null;
 
     //Check email duplicate
     const getUser = await User.find({ email });
@@ -87,6 +196,11 @@ async function add(user) {
     // create new user
     try {
         const newUser = new User({ email, name, password });
+        // if User upload the avatar
+        if (avatar != null) {
+            newUser.avatar = config.BASE_URL + "/" + avatar.filename;
+        }
+        // hash pwd
         const hash = await hashPwd(newUser.password);
         newUser.password = hash;
         await newUser.save();

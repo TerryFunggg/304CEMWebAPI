@@ -4,7 +4,7 @@ const error = require("koa-json-error");
  *  Wrapping koa-json-error within error formator
  */
 module.exports = () => {
-    return error(err => {
+    return error((err) => {
         return {
             // original error attributes
             status: err.status || err.statusCode || 500,
@@ -14,7 +14,7 @@ module.exports = () => {
             //type: err.type,
 
             // custom attributes
-            code: -1
+            code: -1,
         };
     });
 };

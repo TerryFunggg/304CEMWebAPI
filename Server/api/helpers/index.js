@@ -26,9 +26,9 @@ function message(message, code) {
  * @param {String} password message string
  * @returns  hash password
  */
-function hashPwd(password) {
+function hashPwd(password, salt = 10) {
     return new Promise(async (resolve, reject) => {
-        bcrypt.hash(password, 10, (err, hash) => {
+        bcrypt.hash(password, salt, (err, hash) => {
             if (err) reject(new errors.InternalServerError());
             resolve(hash);
         });
