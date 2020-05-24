@@ -20,7 +20,7 @@ const config = require("./config");
 /* ################################## */
 /* Middleware                         */
 /* ################################## */
-//app.use(cors(config.CORS_OPT));
+app.use(cors(config.CORS_OPT));
 app.use(logger());
 app.use(error());
 app.use(responseTime());

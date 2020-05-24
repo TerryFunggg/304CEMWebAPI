@@ -175,7 +175,7 @@ function authenticate(email, password) {
             await comparePwd(password, user.password);
             resolve(user); // if success, then return user.
         } catch (err) {
-            reject(new errors.ConfirmationError());
+            reject(new errors.AuthorizationError());
         }
     });
 }
