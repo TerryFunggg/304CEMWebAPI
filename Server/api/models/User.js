@@ -27,7 +27,7 @@ const UserSchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
-        default: config.BASE_URL + "/a35855d6-7a9e-4f59-bc84-0606b9d2465d.png",
+        default: config.BASE_URL + "/default.png",
     },
     following: [],
     followers: [],

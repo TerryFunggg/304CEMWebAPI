@@ -48,6 +48,7 @@ exports.getPostsByPostID = async (ctx, next) => {
         const post = await findPostByPid(pid);
         ctx.status = 200;
         ctx.body = {
+            _id:post._id,
             publisher: post.publisher,
             desc: post.desc,
             image: post.image,

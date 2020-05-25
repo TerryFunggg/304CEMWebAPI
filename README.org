@@ -1,1 +1,5 @@
 * 304CEM WebAPI
+
+* To Start the server
+~cd Server~
+~npm run dev~

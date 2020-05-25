@@ -102,7 +102,7 @@ exports.updateUserFollowing = async (ctx, next) => {
 
 exports.removeUserFollowing = async (ctx, next) => {
     try {
-        const unfollow_id = ctx.request.query.fid;
+        const unfollow_id = ctx.request.body.fid;
         const f = await removeFollowing(ctx.params.id, unfollow_id);
         const u = await removeFollowers(unfollow_id, ctx.params.id);
         ctx.status = 201;
