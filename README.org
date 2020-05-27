@@ -1,5 +1,13 @@
 * 304CEM WebAPI
 
 * To Start the server
-~cd Server~
-~npm run dev~
+
+Before start, you may need to change the server url in Server/congig.js
+And then follow the command to run the Restful server
+#+begin_src bash
+cd Server
+npm run dev
+#+end_src
+
+* Start the Client
+Host the Client/index.html,then you can start run the web app.
