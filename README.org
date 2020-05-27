@@ -2,7 +2,7 @@
 
 * To Start the server
 
-Before start, you may need to change the server url in Server/congig.js
+Before start, you may need to change the server url in Server/config.js
 And then follow the command to run the Restful server
 #+begin_src bash
 cd Server
